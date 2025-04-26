@@ -1,0 +1,48 @@
+# Model arguments
+model_name_or_path: Qwen/Qwen2.5-1.5B-Instruct
+torch_dtype: float16
+use_peft: true
+load_in_4bit: true
+bnb_4bit_compute_dtype: float16
+
+# Dataset arguments
+dataset_id_or_path: tau/commonsense_qa
+dataset_splits: train
+
+# Training arguments
+output_dir: runs/qwen2.5-1.5b-grpo-commonsenseqa
+max_steps: 500
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: false
+learning_rate: 5e-7
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+
+do_eval: true
+eval_strategy: steps
+eval_steps: 50
+
+# GRPO specific parameters
+beta: 0.001
+max_prompt_length: 256
+max_completion_length: 1024
+num_generations: 8
+use_vllm: false
+
+# Logging & checkpoint
+logging_strategy: steps
+logging_steps: 10
+report_to:
+  - tensorboard
+  # - wandb
+save_strategy: steps
+save_steps: 50
+seed: 42
+
+# HF Hub
+push_to_hub: true
+hub_model_id: Wayer/qwen2.5-1.5b-commonsenseqa-grpo-rule_based
+hub_strategy: every_save
